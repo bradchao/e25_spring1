@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script>
+            function calc(){
+                let url = '/brad03/calc?x=' + $('#x').val() + "&y=" + $('#y').val();
+                $('#r').load(url);
+            }
+
+        </script>
+    </head>
+    <body>
+        <h1>Brad Big Company</h1>
+        <hr />
+        <input id="x" />
+        +
+        <input id="y" />
+        <input type="button" onclick="calc()" value="=" />
+        <span id="r"></span>
+
+    </body>
+</html>
