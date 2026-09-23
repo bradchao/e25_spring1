@@ -1,16 +1,14 @@
 package com.example.spring01.apis;
 
 import com.example.spring01.dto.Member;
+import com.example.spring01.dto.MemberResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -19,6 +17,9 @@ import java.util.HashMap;
 public class Brad05 {
     @Autowired
     private NamedParameterJdbcTemplate jdbc;
+
+    @Autowired
+    private MemberResponse memberResponse;
 
     @RequestMapping("/test1")
     public void test1(){
@@ -54,8 +55,9 @@ public class Brad05 {
         System.out.printf("%s\n", (n>0?"Success":"Failure"));
     }
 
-    @PostMapping("/test3")
-    public void test3(@RequestBody Member member){
+    @PostMapping( value = {"","/{isGetId}"})
+    public MemberResponse test3(@RequestBody Member member,
+                                @PathVariable(required = false) Boolean isGetId){
         String sql = """
                 INSERT INTO member
                     (account,passwd, name)
@@ -71,8 +73,26 @@ public class Brad05 {
 
         int n = jdbc.update(sql, new MapSqlParameterSource(args), keyHolder);
         if (n > 0) {
+            if (isGetId == null) isGetId = false;
+
             System.out.printf("%d\n", keyHolder.getKey().intValue());
+
+            if (isGetId) {
+                member.setId((long) keyHolder.getKey().intValue());
+            }
+
+            member.setPasswd("xxxxx");
+
+            memberResponse.setError(0);
+            memberResponse.setMessage("Insert Success");
+            memberResponse.setMember(member);
+
+        }else{
+            memberResponse.setError(-1);
+            memberResponse.setMessage("Insert Failure");
+            memberResponse.setMember(null);
         }
+        return memberResponse;
     }
 
 
