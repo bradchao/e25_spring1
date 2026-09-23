@@ -3,6 +3,9 @@ package com.example.spring01.utils;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Data
 public class Member {
     private Integer id;
@@ -19,13 +22,11 @@ public class Member {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$")
     private String passwd;
 
-    /*
     @Past
-    private String birthday;
+    private Date birthday;
 
     @FutureOrPresent
-    private String pleaveDate;
-    */
+    private LocalDate pleaveDate;
 
     @PositiveOrZero
     private Integer age;

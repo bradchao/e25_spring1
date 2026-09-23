@@ -16,28 +16,28 @@ public class Brad04 {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id){
-
+        System.out.println("delete()");
     }
 
     @PutMapping("")
-    public void update(@RequestBody Member member){
-
+    public void update(@RequestBody @Validated Member member){
+        System.out.println("update()");
     }
 
     @GetMapping("")
     public void findAll(){
-
+        System.out.println("findAll()");
     }
 
     @GetMapping("/{id}")
     public void findById(@PathVariable String id){
-
+        System.out.println("findById()");
     }
 
     @GetMapping("/{name}/{gender}")
     public void findByNameAndGender(@PathVariable String name,
                                     @PathVariable String gender){
-
+        System.out.println("findByNameAndGender()");
     }
 
 
