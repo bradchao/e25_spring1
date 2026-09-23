@@ -117,6 +117,38 @@ public class Brad05 {
         jdbc.batchUpdate(sql, params);
     }
 
+    @PostMapping("/multidata2")
+    public void test5(@RequestBody List<Member> members){
+        for (Member member : members){
+            test3(member, false);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void test6(@PathVariable Integer id){
+        String sql = """
+                DELETE FROM member
+                WHERE id = :id
+                """;
+        HashMap<String, Integer> args = new HashMap<>();
+        args.put("id", id);
+        jdbc.update(sql, args);
+
+    }
+
+    @PutMapping("")
+    public void test7(@RequestBody Member member){
+        String sql = """
+                UPDATE member
+                SET name = :name
+                WHERE id = :id
+                """;
+        HashMap<String, Object> args = new HashMap<>();
+        args.put("id", member.getId());
+        args.put("name", member.getName());
+        jdbc.update(sql, args);
+
+    }
 
 
 
