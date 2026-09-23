@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/brad05")
@@ -94,6 +95,29 @@ public class Brad05 {
         }
         return memberResponse;
     }
+
+    @PostMapping("/multidata")
+    public void test4(@RequestBody List<Member> members){
+        //System.out.println(members.size());
+        String sql = """
+                INSERT INTO member
+                    (account,passwd, name)
+                VALUES
+                    (:acc, :pass, :name)
+                """;
+
+        MapSqlParameterSource[] params = new MapSqlParameterSource[members.size()];
+        for (int i=0; i<members.size(); i++){
+            params[i] = new MapSqlParameterSource();
+            params[i].addValue("acc", members.get(i).getAccount());
+            params[i].addValue("pass", BCrypt.hashpw(members.get(i).getPasswd(),BCrypt.gensalt()));
+            params[i].addValue("name", members.get(i).getName());
+        }
+
+        jdbc.batchUpdate(sql, params);
+    }
+
+
 
 
 }
