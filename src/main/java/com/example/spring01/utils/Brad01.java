@@ -1,4 +1,4 @@
-package com.example.spring01.apis;
+package com.example.spring01.utils;
 
 import org.springframework.stereotype.Component;
 /*
