@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController     // => Bean => Component => IoC
-@RequestMapping("/member")
+@RequestMapping("/brad02")
 public class Brad02 {
     @Autowired
     private Brad01 brad01;

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script>
+            async function calc(){
+                let url = '/brad03/calc?x=' +
+                    document.getElementById("x").value +
+                    "&y=" +
+                    document.getElementById("y").value;
+
+            let response = await fetch(url);
+            let result = await response.text();
+            document.getElementById("r").innerHTML = result;
+            }
+
+        </script>
+    </head>
+    <body>
+        <h1>Brad Big Company V2</h1>
+        <hr />
+        <input id="x" />
+        +
+        <input id="y" />
+        <input type="button" onclick="calc()" value="=" />
+        <span id="r"></span>
+
+    </body>
+</html>
