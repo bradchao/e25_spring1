@@ -1,6 +1,8 @@
 package com.example.spring01.apis;
 
+import com.example.spring01.utils.Member;
 import com.example.spring01.utils.User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/member")
@@ -8,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 public class Brad04 {
 
     @PostMapping("")
-    public void register(@RequestBody User user){
+    public void register(@RequestBody @Validated Member member){
+        System.out.println("register()");
     }
 
     @DeleteMapping("/{id}")
@@ -17,7 +20,7 @@ public class Brad04 {
     }
 
     @PutMapping("")
-    public void update(@RequestBody User user){
+    public void update(@RequestBody Member member){
 
     }
 
