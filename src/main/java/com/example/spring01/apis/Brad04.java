@@ -5,7 +5,7 @@ import com.example.spring01.utils.User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/member")
+@RequestMapping("/member2")
 @RestController
 public class Brad04 {
 
