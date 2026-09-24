@@ -15,4 +15,6 @@ public class Gift {
 
         @JsonProperty("ContactTel")
         private String tel;
+
+        private int error;
 }
