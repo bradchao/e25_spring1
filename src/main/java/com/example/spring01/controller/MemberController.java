@@ -1,6 +1,7 @@
 package com.example.spring01.controller;
 
 import com.example.spring01.config.ReadConfig;
+import com.example.spring01.dto.Base64Upload;
 import com.example.spring01.dto.MemberForm;
 import com.example.spring01.entity.Member;
 import com.example.spring01.service.MemberService;
@@ -14,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,6 +161,31 @@ public class MemberController {
                 }
             }
         }
+
+    }
+
+    @PostMapping("/test3")
+    public ResponseEntity<String> test3(@RequestBody Base64Upload upload){
+        System.out.println(upload.getFileName());
+        System.out.println(upload.getContentType());
+        System.out.println(upload.getBase64());
+
+        /*
+            save table: 1. String : upload.getBase64()
+                        2. blob: fileBytes => XX
+            save File: fileBytes
+         */
+
+        byte[] fileBytes = Base64.getDecoder().decode(upload.getBase64());
+        Path uploadDir = Path.of(readConfig.getUploadDir());
+        Path filePath = uploadDir.resolve(upload.getFileName());
+        try {
+            Files.write(filePath, fileBytes);
+            return ResponseEntity.ok("Upload Success");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Upload Failure");
+        }
+
 
 
 
