@@ -1,14 +1,21 @@
 package com.example.spring01.controller;
 
+import com.example.spring01.config.ReadConfig;
+import com.example.spring01.dto.MemberForm;
 import com.example.spring01.entity.Member;
 import com.example.spring01.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -97,8 +104,65 @@ public class MemberController {
         map.put("companyName",companyName);
         map.put("companyTel",companyTel);
 
-
         return ResponseEntity.ok(map);
     }
+
+    @Autowired
+    private NamedParameterJdbcTemplate jdbc;
+
+    @PostMapping("/{id}")
+    public void test1(@PathVariable Long id,
+                      @RequestParam MultipartFile upload){
+        try {
+            byte[] bytes = upload.getBytes();
+            String sql = """
+                    UPDATE member
+                    SET icon = :icon
+                    WHERE id = :id
+                    """;
+            Map<String, Object> args = new HashMap<>();
+            args.put("icon", bytes);
+            args.put("id", id);
+            int n = jdbc.update(sql, args);
+            System.out.print(n > 0);
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);  // 500
+        }
+    }
+
+    @Autowired
+    private ReadConfig readConfig;
+
+    @PostMapping("/test2")
+    public void test2(@ModelAttribute MemberForm memberForm){
+        System.out.println(memberForm.getAccount());
+        System.out.println(memberForm.getFiles().size());
+        System.out.println(readConfig.getUploadDir());
+
+        File here = new File(".");
+
+        List<MultipartFile> files = memberForm.getFiles();
+        for (MultipartFile file: files){
+            if (!file.isEmpty()){
+                try {
+                    String target = here.getAbsolutePath() +  "/" + readConfig.getUploadDir()  +
+                            memberForm.getAccount() + "_" +
+                            file.getOriginalFilename();
+                    System.out.println(target);
+                    file.transferTo(new File(target));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+
+
+    }
+
+
+
 
 }
