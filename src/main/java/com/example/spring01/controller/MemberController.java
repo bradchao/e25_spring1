@@ -22,7 +22,7 @@ public class MemberController {
     @GetMapping("/exists")
     public ResponseEntity<Boolean> checkAccount(@RequestParam String account){
         boolean isExist = service.checkAccount(account);
-        System.out.print(isExist?"Yes":"No");
+        //Map<String,Boolean> map = Map.of("isExist", isExist);
         return ResponseEntity.ok(isExist);
     }
 

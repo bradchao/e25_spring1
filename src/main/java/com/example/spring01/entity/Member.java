@@ -14,8 +14,10 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String account;
 
+    @Column(nullable = false)
     private String passwd;
 
+    @Column(nullable = false)
     private String name;
 
     @Lob
