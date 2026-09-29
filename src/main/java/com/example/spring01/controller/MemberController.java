@@ -4,6 +4,7 @@ import com.example.spring01.entity.Member;
 import com.example.spring01.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,11 +73,32 @@ public class MemberController {
             session.invalidate();
             map = Map.of("success", false);
         }
+        return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpSession session){
+        session.invalidate();
+    }
+
+    @Value("${company.name}")
+    private String companyName;
+
+    @Value("${company.tel}")
+    private String companyTel;
+
+    @PostMapping("/status")
+    public ResponseEntity<Map<String,Object>> status(HttpSession session){
+        Object member = session.getAttribute("member");
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("success", member != null);
+        map.put("member", member);
+        map.put("companyName",companyName);
+        map.put("companyTel",companyTel);
 
 
         return ResponseEntity.ok(map);
     }
-
-
 
 }
