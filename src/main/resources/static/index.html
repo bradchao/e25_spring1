@@ -3,6 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title>Title</title>
+        <style>
+            table {border-collapse: collapse; width: 90%; margin: 20px}
+            th,td {border: 1px solid #ccc; padding: 8px; text-align: center}
+            th {background-color: burlywood}
+        </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script>
             $(document).ready(function () {
@@ -34,6 +39,48 @@
                     }).always(location.href = "login.html");
                 })
                 //-------------------
+                let nowPage = 0;
+                let rpp = 10;
+                let totalPage = 0;
+                let isLast = false;
+                function loadGifts(page) {
+                    $.ajax({
+                        url: `/gifts?page=${page}&rpp=${rpp}`,
+                        method: "GET",
+                        dataType: "json"
+                    }).done(result => {
+                        nowPage = result.page;
+                        totalPage = result.totalPage;
+                        isLast = result.isLast;
+
+                        $('#page').text(`${nowPage + 1} / ${totalPage}`);
+
+                        let tbody = $('#giftTable tbody').empty();
+                        result.data.forEach(gift => {
+                            tbody.append(
+                                `
+                                <tr>
+                                    <td>${gift.id}</td>
+                                    <td>${gift.name}</td>
+                                    <td>${gift.addr}</td>
+                                    <td>${gift.tel}</td>
+                                </tr>
+                                `
+                            );
+                        });
+
+                    })
+                }
+
+                $('#prev').click(() => {
+                    if (nowPage > 0) loadGifts(nowPage -1);
+                });
+                $('#next').click(() => {
+                    if (!isLast) loadGifts(nowPage + 1);
+                });
+
+                loadGifts(nowPage);
+
             });
 
         </script>
