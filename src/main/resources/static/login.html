@@ -19,10 +19,16 @@
                             passwd: passwd
                         }),
                         success: function (response) {
-
+                            console.log(response);
+                            if (response.success){
+                                location.href = "index.html";
+                            }else{
+                                $('#mesg').text("Login Failure")
+                            }
                         },
                         error: function (xhttp, status, error) {
-
+                            console.log(status);
+                            console.log(error);
                         }
                     });
                 })
