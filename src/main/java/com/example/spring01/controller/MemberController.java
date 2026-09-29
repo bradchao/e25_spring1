@@ -2,10 +2,12 @@ package com.example.spring01.controller;
 
 import com.example.spring01.entity.Member;
 import com.example.spring01.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -46,11 +48,34 @@ public class MemberController {
         String account = body.get("account");
         String passwd = body.get("passwd");
 
-        boolean isSuccess = service.login(account, passwd);
+        //boolean isSuccess = service.login(account, passwd);
+        boolean isSuccess = service.loginV2(account, passwd);
+
         Map<String,Boolean> map = Map.of("success", isSuccess);
         return ResponseEntity.ok(map);
     }
 
+    @PostMapping("/loginV2")
+    public ResponseEntity<Map<String,Boolean>> login(
+            @RequestBody Map<String, String> body,
+            HttpSession session
+            ){
+        String account = body.get("account");
+        String passwd = body.get("passwd");
+
+        Member member = service.loginV3(account, passwd);
+        Map<String,Boolean> map;
+        if (member != null){
+            session.setAttribute("member", member);
+            map = Map.of("success", true);
+        }else{
+            session.invalidate();
+            map = Map.of("success", false);
+        }
+
+
+        return ResponseEntity.ok(map);
+    }
 
 
 
